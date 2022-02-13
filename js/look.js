@@ -14,10 +14,31 @@ const telephoneInput = document.querySelector('#telephoneInput')
 const clientId = document.querySelector('#clientId')
 const username_h1 = document.querySelector('#userHeader')
 
-const foods = ["chicken_togora", "chicken_wings", "burger_cheese", "combo", "spinner", "cola", "fanta"]
-let users = window.localStorage.getItem('users')
-users  = JSON.parse(users) || [{userId: 1, username: 'Umid', contact: '998936215272', order:{cola: 4}}, {userId: 2, username: 'eugene', contact: '998936215272', order:{fanta:5}}]
 
+/**
+ * collects all users
+ * @returns void
+ */
+ async function getUsers() {
+    let users = await fetch("https://look-graphql-backend.herokuapp.com/graphql", {
+        method: "POST", 
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: `query {
+                        users {
+                        userId
+                        username
+                        contact
+                        }
+                     }`
+        })
+    })
+    users = await users.json()
+
+    renderUsers(users.data.users)
+}
 
 function renderUsers(users) {
     customers_list.innerHTML = null
