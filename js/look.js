@@ -152,25 +152,43 @@ function renderUsers(users) {
     }
 }
 
-user_add.onsubmit = () => {
+/**
+ * add user to database and call getusers function to render users again
+ * @returns void
+ */
+ user_add.onsubmit = async () => {
     event.preventDefault()
-    if(valid_name(userInput.value) && valid_num(telephoneInput.value)) {
-        users.push({
-            userId: users.length ? +(users.at(-1).userId) + 1 : 1,
-            username: userInput.value,
-            contact: telephoneInput.value,
-            order: {}
-        })
 
-        window.localStorage.setItem('users', JSON.stringify(users))
-
-        userInput.value = null;
-        telephoneInput.value = null;
-
-        renderUsers(users)
-    } else {
+    if(!(valid_name(userInput.value) && valid_num(telephoneInput.value))) {
         alert('Invalid username or phone number')
-    }
+        return
+    } 
+
+    let add = await fetch("https://look-graphql-backend.herokuapp.com/graphql",  {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: `mutation A($user: String! $cont: String!){
+                        addUser(username: $user contact: $cont) {
+                        status
+                        message
+                        data
+                        }
+                    }`,
+            variables: {
+                user: `${userInput.value}`,
+                cont: `${telephoneInput.value}`
+            }
+        })
+    })
+
+    add = await add.json()
+    alert(add.data.addUser.message)
+
+    getUsers()
+
 }
 
 foodForm.onsubmit = () => {
