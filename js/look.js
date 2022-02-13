@@ -137,11 +137,16 @@ function renderUsers(users) {
     }
 }
 
-function renderFoods(arr) {
-    for(let order of arr) {
+
+/**
+ * renders all available food to menu bar
+ * @param {obj} obj
+ */
+ function renderFoods(obj) {
+    for(let order of obj) {
         const [option] = createElement('option')
-        option.textContent = order;
-        option.value = order;
+        option.textContent = order.foodName;
+        option.value = order.foodId;
 
         select.append(option)
     }
