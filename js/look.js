@@ -76,6 +76,41 @@ function renderUsers(users) {
     }
 }
 
+/**
+ * collect one user and this fucntion call another function to render foods
+ * @param {number} id 
+ */
+ async function getUser(id) {
+    let orders = await fetch("https://look-graphql-backend.herokuapp.com/graphql", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify ({
+            query: `query ($id: ID) {
+                        orders (userId: $id) {
+                            food {
+                            foodId
+                            foodName
+                            foodImg
+                        }
+                        count
+                        user {
+                            userId
+                        }
+                        }
+                    }`,
+            variables: {
+                    id: id
+            }
+        })
+    })
+    
+    orders = await orders.json()
+
+    renderOrders(orders.data.orders)  
+}
+
 /* client ordersni main divga chiqaruvchi function  */
 function renderOrders(orders) {
     ul.innerHTML = null
