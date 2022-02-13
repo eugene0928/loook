@@ -111,21 +111,26 @@ function renderUsers(users) {
     renderOrders(orders.data.orders)  
 }
 
-/* client ordersni main divga chiqaruvchi function  */
-function renderOrders(orders) {
+
+/**
+ * show all orders to main window
+ * @param {obj} orders 
+ * @returns void
+ */
+ function renderOrders(orders) {
     ul.innerHTML = null
 
-    for(let order in orders) {
+    for(let order of orders) {
         const [li, img, div, count, name] = createElement('li', 'img', 'div', 'span', 'span')
         
-        count.textContent = orders[order];
-        name.textContent = order
+        count.textContent = order.count
+        name.textContent = order.food.foodName
         
         li.classList.add('order-item')
         name.classList.add('order-name')
         count.classList.add('order-count')
 
-        img.src = './img/' + order + '.jpeg';
+        img.src = order.food.foodImg
         div.append(name, count)
         li.append(img, div)
         ul.append(li)
