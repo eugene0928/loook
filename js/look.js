@@ -152,6 +152,7 @@ function renderUsers(users) {
     }
 }
 
+
 /**
  * add user to database and call getusers function to render users again
  * @returns void
@@ -191,20 +192,41 @@ function renderUsers(users) {
 
 }
 
-foodForm.onsubmit = () => {
+/**
+ * handler to create food to database or add count to existing one
+ * @returns void
+ */
+ foodForm.onsubmit = async () => {
     event.preventDefault()
+    
     if(clientId.textContent) {
-        let user = users.find( el => el.userId == clientId.textContent)
 
-        if(user['order'][select.value]) {
-            user['order'][select.value] = +(user['order'][select.value]) + +foodsCount.value;
-        } else {
-            user['order'][select.value] = foodsCount.value;
-        }
-        window.localStorage.setItem('users', JSON.stringify(users))
+        let orders = await fetch("https://look-graphql-backend.herokuapp.com/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                query: `mutation ($foodId: Int! $userId: Int! $count: Int!) {
+                            addOrder (foodId: $foodId userId: $userId count: $count) {
+                            message
+                            data
+                            }
+                    }`,
+                variables: {
+                    foodId: +select.value,
+                    userId: +clientId.textContent,
+                    count: +foodsCount.value
+                }
+            })
+        })
 
-        foodsCount.value = 1
-        renderOrders(user.order)
+        orders = await orders.json()
+        
+        // get that user and render his food
+        getUser(clientId.textContent)
+        
+        alert(orders.data.addOrder.message)
     }
 }
 
