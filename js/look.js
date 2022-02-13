@@ -40,6 +40,12 @@ const username_h1 = document.querySelector('#userHeader')
     renderUsers(users.data.users)
 }
 
+
+/**
+ * renders all users to users bar
+ * @param {arr} users
+ * @returns void
+ */
 function renderUsers(users) {
     customers_list.innerHTML = null
     for(let user of users) {
@@ -56,12 +62,16 @@ function renderUsers(users) {
         li.append(span, a);
         customers_list.append(li)
 
-        li.onclick = () => {
-            clientId.textContent = user.userId;
-            username_h1.textContent = user.username;
-            const filteredOrder = user.order
+        // handler to every user
+        li.onclick = async () => {
 
-            renderOrders(filteredOrder)
+            // get specific user to render his orders
+           await getUser(user.userId)
+
+           clientId.textContent = user.userId;
+           username_h1.textContent = user.username;
+
+                           
         }
     }
 }
