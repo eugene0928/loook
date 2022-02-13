@@ -231,31 +231,45 @@ function renderUsers(users) {
 }
 
 
+/**
+ * 
+ * @param  {...any} arr 
+ * @returns html element/s
+ */
 function createElement(...arr) {
     return arr.map( el => document.createElement(el))
 }
 
-
-
-
-
+/**
+ * 
+ * @param {string} value 
+ * @returns boolean
+ */
 function valid_name(value) {
     if(value.trim() && value.length <= 30 && value.length >= 3 && (/^[a-z A-Z]+$/gi.test(value))) return true;
     return false;
 }
 
+/**
+ * 
+ * @param {string} value 
+ * @returns boolean
+ */
 function valid_num(value) {
 
     if((/^998[389][0123456789][0-9]{7}$/).test(value)) return true;
     return false;
 }
 
+/**
+ * 
+ * @returns string
+ */
 String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
 
 
 
-renderUsers(users)
-renderFoods(foods)
-// renderOrders()
+getUsers()
+renderFoods(foods)()
