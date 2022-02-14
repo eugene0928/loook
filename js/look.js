@@ -190,6 +190,9 @@ function renderUsers(users) {
 
     getUsers()
 
+    userInput.value = null;
+    telephoneInput.value = null;
+
 }
 
 /**
