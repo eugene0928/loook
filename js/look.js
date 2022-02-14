@@ -272,4 +272,4 @@ String.prototype.toProperCase = function () {
 
 
 getUsers()
-renderFoods(foods)()
+renderFoods(foods)
